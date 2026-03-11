@@ -11,6 +11,7 @@ import {
   getArticleBySlug,
   getServicesByArticleId,
 } from "@/lib/content/repositories";
+import type { ArticleRecord } from "@/lib/content/types";
 import { buildMetadata, buildPageTitle } from "@/lib/metadata";
 import { getRuntimeSiteSettings } from "@/lib/runtime-site-config";
 import { buildRuntimeArticleJsonLd } from "@/lib/runtime-seo";
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export async function generateStaticParams() {
-  const articles = await getPublishedArticles();
+  const articles: ArticleRecord[] = await getPublishedArticles();
 
   return articles.map((article) => ({
     slug: article.slug,
