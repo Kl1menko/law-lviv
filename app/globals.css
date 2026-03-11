@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --muted: #f5f5f5;
+  --muted-foreground: #5f5f5f;
+  --border: #e7e7e7;
+  --accent: #262626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+@keyframes light-pillar-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate3d(-2%, 3%, 0) scale(1.03);
+  }
+}
+
+@keyframes threads-drift {
+  0% {
+    transform: translate3d(-0.5%, -0.35%, 0);
+  }
+
+  100% {
+    transform: translate3d(0.7%, 0.45%, 0);
+  }
+}
+
+@keyframes threads-drift-reverse {
+  0% {
+    transform: translate3d(0.45%, 0.2%, 0);
+  }
+
+  100% {
+    transform: translate3d(-0.6%, -0.3%, 0);
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+select {
+  width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+::selection {
+  background: #111111;
+  color: #ffffff;
+}
+
+.prose-shell {
+  max-width: 72ch;
+}
+
+.prose-shell h2,
+.prose-shell h3 {
+  font-family: var(--font-serif), serif;
+}
+
+.prose-shell hr {
+  margin: 2rem 0;
+}
+
+.prose-shell a {
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.22em;
+}
+
+.prose-shell a:hover {
+  text-decoration-color: var(--foreground);
+}
+
+.prose-shell strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.prose-shell code {
+  word-break: break-word;
+}
+
+.motion-safe\:animate-light-pillar-drift {
+  animation: light-pillar-drift 18s ease-in-out infinite alternate;
+}
+
+.motion-safe\:animate-threads-drift {
+  animation: threads-drift 22s ease-in-out infinite alternate;
+}
+
+.motion-safe\:animate-threads-drift-reverse {
+  animation: threads-drift-reverse 26s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-light-pillar-drift {
+    animation: none;
+  }
+
+  .motion-safe\:animate-threads-drift,
+  .motion-safe\:animate-threads-drift-reverse {
+    animation: none;
+  }
+}

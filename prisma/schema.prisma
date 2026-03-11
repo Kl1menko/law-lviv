@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ContentStatus {
+  draft
+  published
+}
+
+enum LeadStatus {
+  new
+  in_progress
+  closed
+}
+
+enum AdminTemplateType {
+  intake_questionnaire
+  message_template
+  handoff_rule
+  case_brief
+}
+
+enum ConsultationStatus {
+  scheduled
+  completed
+  canceled
+  no_show
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("admin")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Service {
+  id                String        @id @default(cuid())
+  title             String
+  slug              String        @unique
+  shortDescription  String
+  heroTitle         String
+  heroDescription   String
+  intro             String        @db.Text
+  audience          Json
+  problemsSolved    Json
+  processSteps      Json
+  benefits          Json
+  faqItems          Json
+  relatedArticleIds String[]
+  seoTitle          String
+  seoDescription    String
+  seoKeywords       String[]
+  ogImage           String?
+  canonicalUrl      String?
+  status            ContentStatus @default(draft)
+  sortOrder         Int           @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  faqRelations      FaqItem[]
+}
+
+model Article {
+  id             String        @id @default(cuid())
+  title          String
+  slug           String        @unique
+  excerpt        String
+  coverImage     String?
+  category       String
+  tags           String[]
+  authorName     String
+  publishedAt    DateTime?
+  readingTime    Int?
+  contentMarkdown String       @db.Text
+  seoTitle       String
+  seoDescription String
+  seoKeywords    String[]
+  ogImage        String?
+  canonicalUrl   String?
+  status         ContentStatus @default(draft)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model FaqItem {
+  id               String    @id @default(cuid())
+  question         String
+  answer           String    @db.Text
+  category         String
+  relatedServiceId String?
+  sortOrder        Int       @default(0)
+  isFeatured       Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  relatedService   Service?  @relation(fields: [relatedServiceId], references: [id], onDelete: SetNull)
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  clientName String
+  source     String?
+  text       String   @db.Text
+  rating     Int
+  isFeatured Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Lead {
+  id              String         @id @default(cuid())
+  name            String
+  phone           String
+  email           String?
+  message         String         @db.Text
+  sourcePage      String
+  sourceType      String
+  status          LeadStatus     @default(new)
+  assignedTo      String?
+  internalNotes   String?        @db.Text
+  intakeSummary   String?        @db.Text
+  consultations   Consultation[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model SeoLandingPage {
+  id                String        @id @default(cuid())
+  title             String
+  slug              String        @unique
+  location          String        @default("lviv")
+  heroTitle         String
+  heroDescription   String
+  intro             String        @db.Text
+  contentSections   Json
+  faqItems          Json
+  relatedServiceIds String[]
+  relatedArticleIds String[]
+  seoTitle          String
+  seoDescription    String
+  seoKeywords       String[]
+  ogImage           String?
+  canonicalUrl      String?
+  status            ContentStatus @default(draft)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model GlobalSettings {
+  id                    String   @id @default(cuid())
+  companyName           String
+  legalName             String
+  phonePrimary          String
+  phoneSecondary        String?
+  emailPrimary          String
+  address               String
+  city                  String
+  region                String
+  workHours             String
+  googleMapsUrl         String?
+  telegramUrl           String?
+  viberUrl              String?
+  whatsappUrl           String?
+  youtubeUrl            String?
+  facebookUrl           String?
+  instagramUrl          String?
+  defaultSeoTitle       String
+  defaultSeoDescription String
+  defaultOgImage        String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model StaticPage {
+  id             String        @id @default(cuid())
+  key            String        @unique
+  title          String
+  intro          String?
+  bodySections   Json
+  seoTitle       String
+  seoDescription String
+  seoKeywords    String[]
+  status         ContentStatus @default(draft)
+  updatedAt      DateTime      @updatedAt
+}
+
+model AdminTemplate {
+  id          String            @id @default(cuid())
+  key         String            @unique
+  type        AdminTemplateType
+  title       String
+  description String?
+  channel     String?
+  content     String            @db.Text
+  sortOrder   Int               @default(0)
+  isActive    Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Consultation {
+  id         String             @id @default(cuid())
+  leadId     String?
+  clientName String
+  phone      String
+  email      String?
+  startsAt   DateTime
+  endsAt     DateTime
+  format     String
+  status     ConsultationStatus @default(scheduled)
+  notes      String?            @db.Text
+  lead       Lead?              @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+}
