@@ -128,7 +128,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <div className="space-y-3">
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted-foreground)]">Теги</p>
                 <div className="flex flex-wrap gap-2">
-                  {article.tags.map((tag) => (
+                  {article.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="rounded-full border border-[var(--border)] px-3 py-2 text-xs uppercase tracking-[0.18em] text-[var(--muted-foreground)]"
