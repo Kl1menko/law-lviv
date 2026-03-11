@@ -15,7 +15,7 @@ export function HomeHero({ eyebrow, title, description }: HomeHeroProps) {
             {eyebrow ? (
               <p className="text-xs uppercase tracking-[0.24em] text-black/62">{eyebrow}</p>
             ) : null}
-            <h1 className="max-w-[9ch] font-serif text-[3.55rem] leading-[0.9] tracking-tight text-[#111111] sm:max-w-[15ch] sm:text-6xl lg:max-w-[18ch] lg:text-[6rem]">
+            <h1 className="max-w-[11ch] font-serif text-[2.7rem] leading-[0.9] tracking-tight text-[#111111] sm:max-w-[15ch] sm:text-6xl lg:max-w-[18ch] lg:text-[6rem]">
               {title}
             </h1>
           </div>
